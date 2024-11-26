@@ -30,7 +30,7 @@ function App() {
       </AppBar>
 
       <Routes>
-        <Route path="/users" element={<UserList />} />
+        <Route path="/" element={<UserList />} />
         <Route path="/add-user" element={<AddUser />} />
         <Route path="/edit/:id" element={<EditUser />} />
       </Routes>

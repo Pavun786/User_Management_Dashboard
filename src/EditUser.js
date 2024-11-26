@@ -80,7 +80,7 @@ function UserEditForm({ user }) {
           users.splice(index, 1, { ...users[index], ...updateData });
           setUsers([...users]); 
           alert("User Edited Successfully.");
-          navigate("/users");
+          navigate("/");
         } else {
           console.error("User not found");
         }

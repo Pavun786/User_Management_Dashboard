@@ -53,7 +53,7 @@ const UpdateValidationSchema = yup.object({
        }else{
         setUsers([...users,newData])
         alert("User Added Successfully ✔✔")
-        navigate("/users");
+        navigate("/");
        }
 
       
