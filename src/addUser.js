@@ -16,7 +16,13 @@ import { useData } from './Context';
 const UpdateValidationSchema = yup.object({
     Id : yup.number().required(),
     Name:yup.string().required(),
-    Email:yup.string().required(),
+    Email: yup.string()
+        .email('Please enter a valid email address (e.g., abc@example.com)')
+        .matches(
+          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/,
+          'Please enter a valid email address with a proper domain (e.g., abc@example.com)'
+      )
+        .required('Email is required'),
     Mobile:yup.number().required(),
 });
 

@@ -16,9 +16,16 @@ function EditUser() {
   const { id } = useParams();
   const [singleUser, setSingleUser] = useState("");
   const [users,setUsers] = useData();
+  
   useEffect(() => {
-    fetchUser();
-  }, []);
+   
+    if (users) {
+      fetchUser();
+    }
+
+  }, [users,id]);
+
+  console.log("users",users)
 
   const fetchUser = async () => {
     // const data = await fetch(`${API}/users/${id}`, {
@@ -28,11 +35,14 @@ function EditUser() {
 
     const res = users.filter((ele)=> ele.id == id)
 
-    console.log("resss",res)
-
-    setSingleUser(res);
+    if (res.length > 0) {
+      setSingleUser(res[0]); 
+    } else {
+      console.error(`User with ID ${id} not found`);
+    }
   };
 
+  console.log(singleUser)
   return (
     <div className="register">
       {!singleUser ? (
@@ -47,7 +57,13 @@ function EditUser() {
 const UpdateValidationSchema = yup.object({
   Id: yup.number().required(),
   Name: yup.string().required(),
-  Email: yup.string().required(),
+  Email: yup.string()
+        .email('Please enter a valid email address (e.g., abc@example.com)')
+        .matches(
+          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/,
+          'Please enter a valid email address with a proper domain (e.g., abc@example.com)'
+      )
+        .required('Email is required'),
   Mobile: yup.string().required(),
 });
 
@@ -58,10 +74,10 @@ function UserEditForm({ user }) {
 
   const formik = useFormik({
     initialValues: {
-      Id: user[0].id,
-      Name: user[0].name,
-      Email: user[0].email,
-      Mobile: user[0].phone,
+      Id: user.id,
+      Name: user.name,
+      Email: user?.email,
+      Mobile: user?.phone,
     },
 
     validationSchema: UpdateValidationSchema,
@@ -74,7 +90,7 @@ function UserEditForm({ user }) {
           phone: values.Mobile,
         };
       
-        const index = users.findIndex((ur) => ur.id == user[0].id);
+        const index = users.findIndex((ur) => ur.id == user.id);
       
         if (index !== -1) {
           users.splice(index, 1, { ...users[index], ...updateData });
